@@ -7,7 +7,7 @@ let remainignGuesses = document.querySelector(".remaining span")
 let message = document.querySelector(".message");
 let playAgain = document.querySelector(".play-again");
 
-let word = "mongolia";
+let word = "amongus";
 let guessedLetters = [];
 
 function hideWord() {
@@ -42,12 +42,43 @@ let validatePlayerInput = function(input) {
     }
 };
 
-let makeGuess = function(letter) {
-    letter.toUpperCase();
-    if(guessedLetters.includes(letter)){
+let makeGuess = function(guess) {
+    guess = guess.toUpperCase();
+    if(guessedLetters.includes(guess)){
         message.innerText = "You already guessed that letter";
     } else {
-        guessedLetters.push(letter);
+        guessedLetters.push(guess);
         console.log(guessedLetters);
+        showGuessedLetters();
+        updateWordInProgress(guessedLetters);
     };
 };
+
+let showGuessedLetters  = function() {
+    guessedLettersElement.innerHTML = "";
+    for(let letter of guessedLetters) {
+        let li = document.createElement("li");
+        li.innerText = letter;
+        guessedLettersElement.append(li);
+    }
+};
+
+let updateWordInProgress = function(guessedLetters) {
+    let wordUpper = word.toUpperCase();
+    let wordArray = wordUpper.split("");
+
+    for(let letter of wordArray) {
+    //check if word appears in array add it to specific index with splice
+        if(guessedLetters.includes(letter)) {
+            let indexOfWord = guessedLetters.indexOf(letter);
+            let wordInProgressArray = wordInProgress.innerText.split("");
+            wordInProgressArray.splice(indexOfWord, 1, letter);
+            let wordInProgressString = wordInProgressArray.join("");
+            console.log(wordInProgressArray);
+            console.log(wordInProgressString);
+            wordInProgress.innerText = wordInProgressString;
+        };
+    };
+};
+
+//can only guess one letter even if there are multiple of same type and letters appear out of order
