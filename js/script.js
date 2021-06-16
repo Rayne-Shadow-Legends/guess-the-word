@@ -7,7 +7,7 @@ let remainignGuesses = document.querySelector(".remaining span")
 let message = document.querySelector(".message");
 let playAgain = document.querySelector(".play-again");
 
-let word = "amongus";
+let word = "angguss";
 let guessedLetters = [];
 
 function hideWord() {
@@ -68,11 +68,11 @@ let updateWordInProgress = function(guessedLetters) {
     let wordArray = wordUpper.split("");
 
     for(let letter of wordArray) {
-    //check if word appears in array add it to specific index with splice
         if(guessedLetters.includes(letter)) {
-            let indexOfWord = guessedLetters.indexOf(letter);
+            let indexOfWord = wordArray.indexOf(letter);
             let wordInProgressArray = wordInProgress.innerText.split("");
-            wordInProgressArray.splice(indexOfWord, 1, letter);
+            wordInProgressArray.splice(Number(indexOfWord), 1, letter);
+            console.log(wordInProgressArray)
             let wordInProgressString = wordInProgressArray.join("");
             console.log(wordInProgressArray);
             console.log(wordInProgressString);
@@ -81,4 +81,6 @@ let updateWordInProgress = function(guessedLetters) {
     };
 };
 
-//can only guess one letter even if there are multiple of same type and letters appear out of order
+//TODO: can only guess one letter even if there are multiple of same type and letters appear out of order
+//need to change all instances of letter instead of one probably not using indexOf(letter)
+// loop through whole array
