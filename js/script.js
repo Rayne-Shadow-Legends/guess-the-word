@@ -66,19 +66,17 @@ let showGuessedLetters  = function() {
 let updateWordInProgress = function(guessedLetters) {
     let wordUpper = word.toUpperCase();
     let wordArray = wordUpper.split("");
+    let tempArray = [];
 
     for(let letter of wordArray) {
-        if(guessedLetters.includes(letter)) {
-            let indexOfWord = wordArray.indexOf(letter);
-            let wordInProgressArray = wordInProgress.innerText.split("");
-            wordInProgressArray.splice(Number(indexOfWord), 1, letter);
-            console.log(wordInProgressArray)
-            let wordInProgressString = wordInProgressArray.join("");
-            console.log(wordInProgressArray);
-            console.log(wordInProgressString);
-            wordInProgress.innerText = wordInProgressString;
+        if(guessedLetters.includes(letter)) { 
+            tempArray.push(letter)
+        } else {
+            tempArray.push("●")
         };
     };
+    tempString = tempArray.join(" ")
+    wordInProgress.innerText = tempString;
 };
 
 //TODO: can only guess one letter even if there are multiple of same type and letters appear out of order
