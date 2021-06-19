@@ -7,8 +7,24 @@ let remainignGuesses = document.querySelector(".remaining span")
 let message = document.querySelector(".message");
 let playAgain = document.querySelector(".play-again");
 
-let word = "angguss";
 let guessedLetters = [];
+
+let guesses = 8; 
+
+let getWord = async function() {
+    let apiData = await fetch("https://gist.githubusercontent.com/skillcrush-curriculum/7061f1d4d3d5bfe47efbfbcfe42bf57e/raw/5ffc447694486e7dea686f34a6c085ae371b43fe/words.txt");
+    let textData = await apiData.text();
+    //console.log(textData);
+    let wordArray = textData.split("\n");
+    //console.log(wordArray);
+
+        let randomNumber = Math.floor(Math.random() * wordArray.length);
+        word = wordArray[randomNumber].trim();
+        //console.log(randomWord);
+        hideWord(word);
+};
+
+getWord();
 
 function hideWord() {
     for(hiddenWord = ""; hiddenWord.length < word.length; wordInProgress.innerText = hiddenWord) {
@@ -16,7 +32,6 @@ function hideWord() {
         hiddenWord = hiddenWord + circleString;
     };
 };
-hideWord();
 
 guessButton.addEventListener("click", function(e){
     e.preventDefault();
@@ -25,18 +40,18 @@ guessButton.addEventListener("click", function(e){
     let validatedGuess = validatePlayerInput(playerGuess);
 
     if(validatedGuess) {
-        makeGuess(validatedGuess)
+        makeGuess(validatedGuess);
     }
 });
 
 let validatePlayerInput = function(input) {
     let acceptedLetters = /[a-zA-Z]/
     if(input.length === 0) {
-       message.innerText = "Please input a letter"
+       message.innerText = "Please input a letter";
     } else if(input.length > 1) {
-       message.innerText = "Only one letter is allowed"
+       message.innerText = "Only one letter is allowed";
     } else if(!input.match(acceptedLetters)) {
-        message.innerText = "Only letters are allowed"
+        message.innerText = "Only letters are allowed";
     } else {
         return input;
     }
@@ -50,6 +65,7 @@ let makeGuess = function(guess) {
         guessedLetters.push(guess);
         console.log(guessedLetters);
         showGuessedLetters();
+        countGuesses(guess);
         updateWordInProgress(guessedLetters);
     };
 };
@@ -70,15 +86,40 @@ let updateWordInProgress = function(guessedLetters) {
 
     for(let letter of wordArray) {
         if(guessedLetters.includes(letter)) { 
-            tempArray.push(letter)
+            tempArray.push(letter);
         } else {
-            tempArray.push("●")
+            tempArray.push("●");
         };
     };
-    tempString = tempArray.join(" ")
+    tempString = tempArray.join("")
     wordInProgress.innerText = tempString;
+    checkIfWin();
 };
 
-//TODO: can only guess one letter even if there are multiple of same type and letters appear out of order
-//need to change all instances of letter instead of one probably not using indexOf(letter)
-// loop through whole array
+ let countGuesses = function(guess) {
+     let upperWord = word.toUpperCase();
+     if(!upperWord.includes(guess)) {
+         message.innerText = "The word doesn't contain that letter";
+         guesses--;
+     } else if(upperWord.includes(guess)){
+        message.innerText = "Good job, The word contain that letter";
+     };
+
+    if(guesses > 1){
+        remainignGuesses.innerText = `${guesses} guesses`
+
+        } else if(guesses === 1){ 
+            remainignGuesses.innerText = `${guesses} guess`
+
+        } else if(guesses === 0) {
+        message.innerHTML = `Game over! The word was <span class="highlight">${upperWord}</span>.`;
+        remainignGuesses.innerText = `${guesses} guesses`
+        };
+    }
+
+const checkIfWin = function () {
+  if (word.toUpperCase() === wordInProgress.innerText) {
+    message.classList.add("win");
+    message.innerHTML = `<p class="highlight">You guessed the correct word! Congrats!</p>`;
+  };
+};
