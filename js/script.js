@@ -3,7 +3,7 @@ let guessButton = document.querySelector(".guess");
 let input = document.querySelector(".letter")
 let wordInProgress = document.querySelector(".word-in-progress");
 let guessesParagraph = document.querySelector(".remaining");
-let remainignGuesses = document.querySelector(".remaining span")
+let remainingGuesses = document.querySelector(".remaining span")
 let message = document.querySelector(".message");
 let playAgain = document.querySelector(".play-again");
 
@@ -106,14 +106,15 @@ let updateWordInProgress = function(guessedLetters) {
      };
 
     if(guesses > 1){
-        remainignGuesses.innerText = `${guesses} guesses`
+        remainingGuesses.innerText = `${guesses} guesses`;
 
         } else if(guesses === 1){ 
-            remainignGuesses.innerText = `${guesses} guess`
+            remainingGuesses.innerText = `${guesses} guess`;
 
         } else if(guesses === 0) {
         message.innerHTML = `Game over! The word was <span class="highlight">${upperWord}</span>.`;
-        remainignGuesses.innerText = `${guesses} guesses`
+        remainingGuesses.innerText = `${guesses} guesses`;
+        startOver();
         };
     }
 
@@ -121,5 +122,33 @@ const checkIfWin = function () {
   if (word.toUpperCase() === wordInProgress.innerText) {
     message.classList.add("win");
     message.innerHTML = `<p class="highlight">You guessed the correct word! Congrats!</p>`;
+
+    startOver();
   };
 };
+
+let startOver = function() {
+    guessButton.classList.add("hide");
+    guessesParagraph.classList.add("hide");
+    guessedLettersElement.classList.add("hide");
+    playAgain.classList.remove("hide");
+    console.log("button work pog");
+};
+
+playAgain.addEventListener("click", function() {
+    message.classList.remove("win")
+    message.classList.remove("hide");
+    message.innerText = "";
+    guessedLettersElement.innerHTML = "";
+
+    guessedLetters = [];
+    guesses = 8;
+    remainingGuesses.innerText = `${guesses} guesses`;
+
+    guessButton.classList.remove("hide");
+    guessesParagraph.classList.remove("hide");
+    guessedLettersElement.classList.remove("hide");
+    playAgain.classList.add("hide");
+
+    getWord();
+});
