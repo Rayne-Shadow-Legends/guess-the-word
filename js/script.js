@@ -36,6 +36,7 @@ function hideWord() {
 guessButton.addEventListener("click", function(e){
     e.preventDefault();
     let playerGuess = input.value;
+    input.value = "";
     message.innerText = "";
     let validatedGuess = validatePlayerInput(playerGuess);
 
